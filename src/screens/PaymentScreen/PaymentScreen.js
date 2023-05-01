@@ -48,8 +48,8 @@ export default function PaymentScreen({navigation}) {
       </View>
       {/* Buttons container */}
       <View style={styles.buttonsContainer}>
-        <CustomButton text="Button 1" type="paymentScreen" />
-        <CustomButton text="Button 2" type="paymentScreen" />
+        <CustomButton text="Cancel" type="paymentScreen" />
+        <CustomButton text="Pay" type="paymentScreen" />
       </View>
     </KeyboardAvoidingView>
   );

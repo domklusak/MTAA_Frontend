@@ -14,6 +14,7 @@ import ChatScreen from '../screens/ChatScreen';
 import BankScreen from '../screens/BankScreen';
 import MapScreen from '../screens/MapScreen';
 import ProfileScreen from '../screens/ProfileScreen';
+import FindPeopleScreen from '../screens/FindPeopleScreen';
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -29,6 +30,8 @@ const MainTabNavigator = () => {
     <Tab.Navigator
       initialRouteName={homeName}
       screenOptions={({route}) => ({
+        headerShown: false,
+        unmountOnBlur: true,
         tabBarActiveTintColor: 'black',
         tabBarLabelStyle: {paddingBottom: 5, fontSize: 10},
         tabBarStyle: {padding: 5, height: 60},
@@ -66,11 +69,12 @@ const Navigation = () => {
       <Stack.Navigator screenOptions={{headerShown: false}}>
         <Stack.Screen name="SignIn" component={SignInScreen} />
         <Stack.Screen name="SignUp" component={RegisterScreen} />
-        <Stack.Screen name="Home" component={MainTabNavigator} />
+        <Stack.Screen name="Main" component={MainTabNavigator} />
         <Stack.Screen name="Chat" component={ChatScreen} />
-        <Stack.Screen name="Profile" component={ProfileScreen} />
         <Stack.Screen name="Bank" component={BankScreen} />
         <Stack.Screen name="Map" component={MapScreen} />
+        <Stack.Screen name="Profile" component={ProfileScreen} />
+        <Stack.Screen name="FindPeople" component={FindPeopleScreen} />
       </Stack.Navigator>
     </NavigationContainer>
   );

@@ -10,7 +10,7 @@ export default function ProfileScreen({navigation}) {
 
   useEffect(() => {
     axiosInstance
-      .get(`transactions?account_transactions=${userData.account_id}`)
+      .get(`accounts/${userData.account_id}/transactions`)
       .then(response => {
         if (response.data) {
           console.log(userData);

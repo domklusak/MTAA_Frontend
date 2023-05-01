@@ -38,20 +38,22 @@ export default function ProfileScreen({navigation}) {
 
   useEffect(() => {
     async function fetch_friends() {
-      await acc_data.friends.map(friendId => {
-        axiosInstance
-          .get(`accounts/${friendId}`)
-          .then(response => {
-            if (response.data) {
-              setAccfriends(prevState => [...prevState, response.data]);
-            } else {
-              console.log('Response data is empty');
+      if (acc_data.friends) {
+        await Promise.all(
+          acc_data.friends.map(async friendId => {
+            try {
+              const response = await axiosInstance.get(`accounts/${friendId}`);
+              if (response.data) {
+                setAccfriends(prevState => [...prevState, response.data]);
+              } else {
+                console.log('Response data is empty');
+              }
+            } catch (error) {
+              console.log(error);
             }
-          })
-          .catch(error => {
-            console.log(error);
-          });
-      });
+          }),
+        );
+      }
     }
     fetch_friends();
   }, [acc_data]);
@@ -126,8 +128,7 @@ export default function ProfileScreen({navigation}) {
             <View style={styles.friendContainer}>
               <Image source={Logo} style={styles.profileImage} />
               <Text style={styles.name}>
-                {item.name}
-                {item.surname}
+                {item.name} {item.surname}
               </Text>
               <View style={styles.icons}>
                 <TouchableOpacity

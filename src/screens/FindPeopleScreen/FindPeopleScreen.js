@@ -38,12 +38,14 @@ export default function FindPeople({navigation}) {
   useEffect(() => {
     axiosInstance.get('accounts').then(response => {
       if (response.data) {
-        const notFriends = response.data.filter(
-          item =>
-            !acc_data.friends.includes(item.id) &&
-            item.id !== userData.account_id,
-        );
-        setNotfriends(prevState => [...prevState, ...notFriends]);
+        if (acc_data.friends) {
+          const notFriends = response.data.filter(
+            item =>
+              !acc_data.friends.includes(item.id) &&
+              item.id !== userData.account_id,
+          );
+          setNotfriends(prevState => [...prevState, ...notFriends]);
+        }
       } else {
         console.log('Response data is empty');
       }

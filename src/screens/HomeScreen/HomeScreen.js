@@ -65,7 +65,9 @@ export default function HomeScreen({navigation}) {
         {chat_data
           .filter(
             item =>
-              acc_data.friends.includes(item.id) && item.id !== acc_data.id,
+              acc_data.friends.includes(item.id) &&
+              item.id !== acc_data.id &&
+              item.rooms.some(room => acc_data.rooms.includes(room)),
           )
           .map((item, index) => (
             <TouchableOpacity

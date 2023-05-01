@@ -25,7 +25,7 @@ const SignInScreen = () => {
           setUserData({
             account_id: response.data.account_id,
           });
-          navigation.navigate('Home');
+          navigation.navigate('Main');
         } else {
           console.log('Response data is empty');
         }

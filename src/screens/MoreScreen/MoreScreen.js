@@ -20,33 +20,18 @@ export default function ProfileScreen({navigation}) {
     console.log('Support pressed');
   };
 
+  const onFindPeople = () => {
+    navigation.navigate('FindPeople');
+  };
+
   return (
-    <View style={style.container}>
+    <View style={{flex: 1, alignItems: 'center', justifyContent: 'flex-start'}}>
       <Image source={Logo} style={style.logo} resizeMode="contain" />
-      <CustomButton
-        text="Profile"
-        onPress={onProfilePressed}
-        type="THIRD"
-        style={style.button}
-      />
-      <CustomButton
-        text="Find a bank"
-        onPress={onBankPressed}
-        type="THIRD"
-        style={style.button}
-      />
-      <CustomButton
-        text="Settings"
-        onPress={onSettingPressed}
-        type="THIRD"
-        style={style.button}
-      />
-      <CustomButton
-        text="Support"
-        onPress={onSupportPressed}
-        type="THIRD"
-        style={style.button}
-      />
+      <CustomButton text="Profile" onPress={onProfilePressed} type="THIRD" />
+      <CustomButton text="Find a bank" onPress={onBankPressed} type="THIRD" />
+      <CustomButton text="Settings" onPress={onSettingPressed} type="THIRD" />
+      <CustomButton text="Support" onPress={onSupportPressed} type="THIRD" />
+      <CustomButton text="Find people" onPress={onFindPeople} type="THIRD" />
     </View>
   );
 }
@@ -61,6 +46,5 @@ const style = StyleSheet.create({
   container: {
     flex: 1,
     padding: 10,
-    alignItems: 'center',
-  }
+  },
 });

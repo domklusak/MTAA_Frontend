@@ -4,50 +4,41 @@ import CustomInput from '../../components/CustomInput/CustomInput';
 import CustomButton from '../../components/CustomButton/CustomButton';
 import {useNavigation} from '@react-navigation/native';
 import axios from 'axios';
-import axiosInstance, {setAuthToken} from '../../navigation/axiosConfig';
 
 const RegisterScreen = () => {
-  const [username, setUsername] = useState('');
+  const [name, setName] = useState('');
+  const [surname, setSurname] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [passwordRep, setPasswordRep] = useState('');
-  const [account_id, setAccount_id] = useState('');
   const navigation = useNavigation();
 
   const onRegisterPressed = () => {
-    console.warn('Register user');
-    axios.post('http://localhost:8000/accounts', {
-      password: password,
-      tag: 'random',
-      balance: 1111,
-      name: username,
-      surname: 'james',
-      email: email,
-      friends: [],
-      claims: [],
-      transactions: [],
-      rooms: [],
-    });
-
-    axiosInstance
-      .post('auth/token/', {
-        username: email,
+    axios
+      .post('http://dominik.local:8000/accounts', {
         password: password,
+        tag: 'random',
+        balance: 1111,
+        name: name,
+        surname: surname,
+        email: email,
+        friends: [],
+        claims: [],
+        transactions: [],
+        rooms: [],
       })
       .then(response => {
-        if (response.data) {
-          console.log(response.data); // log the response data
-          setAuthToken(response.data.token);
-          setAccount_id(response.data.account_id);
-          navigation.navigate('Home');
-        } else {
-          console.log('Response data is empty');
-        }
+        Alert.alert(
+          'Registration successful',
+          'Proceed to login page to access the application',
+          [{text: 'OK', onPress: () => navigation.navigate('SignIn')}],
+        );
       })
       .catch(error => {
+        console.log('Error in registration:', error);
         Alert.alert(
-          'Wrong credentials',
-          'Your username or password is incorrect',
+          'Registration error',
+          'There was a problem with your registration',
           [{text: 'Return', onPress: () => console.log('OK Pressed')}],
         );
       });
@@ -64,10 +55,11 @@ const RegisterScreen = () => {
   return (
     <View style={styles.root}>
       <Text style={styles.title}>Create an account</Text>
+      <CustomInput placeholder="Name" value={name} onChangeText={setName} />
       <CustomInput
-        placeholder="Username"
-        value={username}
-        onChangeText={setUsername}
+        placeholder="Surname"
+        value={surname}
+        onChangeText={setSurname}
       />
       <CustomInput placeholder="Email" value={email} onChangeText={setEmail} />
       <CustomInput
