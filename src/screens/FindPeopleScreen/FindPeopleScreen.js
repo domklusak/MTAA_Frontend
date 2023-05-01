@@ -54,7 +54,6 @@ export default function FindPeople({navigation}) {
 
   const handleAddFriend = async friend => {
     try {
-
       await axiosInstance.put(`accounts/${userData.account_id}`, {
         id: acc_data.account_id,
         password: acc_data.password,

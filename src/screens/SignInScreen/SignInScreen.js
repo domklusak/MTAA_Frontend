@@ -1,4 +1,4 @@
-import {View, Text, Image, StyleSheet, Alert} from 'react-native';
+import {View, Image, StyleSheet, Alert} from 'react-native';
 import React, {useContext, useState} from 'react';
 import Logo from '../../../assets/images/logo.png';
 import CustomInput from '../../components/CustomInput/CustomInput';
