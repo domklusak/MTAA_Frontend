@@ -18,7 +18,6 @@ export default function ProfileScreen({navigation}) {
   const [acc_data, setAccData] = useState([]);
   const {userData} = useContext(userDataContext);
   const [acc_friends, setAccfriends] = useState([]);
-  const [tempFriend, setTempFriend] = useState([]);
 
   useEffect(() => {
     axiosInstance
@@ -135,7 +134,6 @@ export default function ProfileScreen({navigation}) {
                   onPress={() =>
                     navigation.navigate('Payment', {
                       accsFriend: item,
-                      signedAcc: acc_data,
                     })
                   }>
                   <Ionicons name="cash-outline" size={24} color="green" />

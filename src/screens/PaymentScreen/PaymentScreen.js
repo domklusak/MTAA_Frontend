@@ -11,45 +11,132 @@ import {
 } from 'react-native';
 import Logo from '../../../assets/images/logo.png';
 import CustomButton from '../../components/CustomButton';
+import axiosInstance from '../../navigation/axiosConfig';
+import userDataContext from '../../components/UserDataContext';
+import {useContext, useEffect, useState} from 'react';
 
-export default function PaymentScreen({navigation}) {
+export default function PaymentScreen({navigation, route}) {
+  const {accsFriend} = route.params ?? {};
+  const {userData} = useContext(userDataContext);
+  const [acc_data, setAccData] = useState([]);
+  const [paymentInfo, setPaymentInfo] = useState({});
+
+  useEffect(() => {
+    async function fetchUser() {
+      try {
+        const response = await axiosInstance.get(
+          `accounts/${userData.account_id}`,
+        );
+        if (response.data) {
+          console.log('Account GET request payment screen ok');
+          setAccData(response.data);
+        } else {
+          console.log('Response data is empty');
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    }
+
+    fetchUser();
+  }, []);
+
+  async function sendPayment() {
+    console.log('Pica: ', paymentInfo);
+    try {
+      await axiosInstance.post(
+        `/transactions?account_id=${userData.account_id}`,
+        {
+          amount: paymentInfo.amount,
+          note: paymentInfo.noteT,
+          send_time: 'who cares',
+          dest_account: accsFriend.id,
+        },
+      );
+      navigation.navigate('Home');
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
   return (
     <KeyboardAvoidingView
       enabled
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
       style={styles.mainContainer}>
-      {/* Main container */}
       <View style={styles.usersContainer}>
         {/* User info */}
         <View style={styles.userInfo}>
           <Image source={Logo} style={styles.imgStyle} resizeMode="contain" />
           <View style={{marginLeft: 50}}>
-            <Text style={styles.textStyle}>User Tag</Text>
-            <Text style={styles.textStyle}>User Name</Text>
+            <Text style={styles.textStyle}>{acc_data.tag}</Text>
+            <Text style={styles.textStyle}>
+              {acc_data.name} {acc_data.surname}
+            </Text>
           </View>
         </View>
         {/* Account balance */}
-        <Text style={styles.textStyle}>Account Balance</Text>
+        <Text style={styles.textStyle}>
+          {acc_data.balance ? (
+            acc_data.balance.toFixed(2)
+          ) : (
+            <Text>Loading data...</Text>
+          )}
+        </Text>
       </View>
       <View style={styles.lineContainer} />
       {/* Other user container */}
-      <View style={styles.otherUserContainer}>
-        <Text style={styles.textStyle}>Amount</Text>
-        <View>
-          <Text style={styles.textStyle}>Other User Tag</Text>
-          <Text style={styles.textStyle}>Other User Name</Text>
+      {accsFriend ? (
+        <View style={styles.otherUserContainer}>
+          <Text style={styles.textStyle}>Debt/Claim</Text>
+          <View>
+            <Text style={styles.textStyle}>{accsFriend.tag}</Text>
+            <Text style={styles.textStyle}>
+              {accsFriend.name} {accsFriend.surname}
+            </Text>
+          </View>
+          <Image source={Logo} style={styles.imgStyle} resizeMode="contain" />
         </View>
-        <Image source={Logo} style={styles.imgStyle} resizeMode="contain" />
-      </View>
+      ) : (
+        <View style={styles.otherUserContainer}>
+          <Text style={styles.textStyle}>Debt/Claim</Text>
+          <View>
+            <Text style={styles.textStyle}>Unknown tag</Text>
+            <Text style={styles.textStyle}>Unknown user</Text>
+          </View>
+          <Image source={Logo} style={styles.imgStyle} resizeMode="contain" />
+        </View>
+      )}
       {/* Payment info container */}
       <View style={styles.paymentContainer}>
-        <TextInput style={styles.amountInput} placeholder="Suma na odoslanie" />
-        <TextInput style={styles.noteInput} placeholder="Poznámka" multiline />
+        <TextInput
+          style={styles.amountInput}
+          placeholder="Amount to be sent"
+          onChangeText={newAmount =>
+            setPaymentInfo(prevState => ({...prevState, amount: newAmount}))
+          }
+        />
+        <TextInput
+          style={styles.noteInput}
+          placeholder="Note for receiver"
+          multiline
+          onChangeText={newNote =>
+            setPaymentInfo(prevState => ({...prevState, noteT: newNote}))
+          }
+        />
       </View>
       {/* Buttons container */}
       <View style={styles.buttonsContainer}>
-        <CustomButton text="Cancel" type="paymentScreen" />
-        <CustomButton text="Pay" type="paymentScreen" />
+        <CustomButton
+          text="Cancel"
+          type="paymentScreen"
+          onPress={() => navigation.navigate('Home')}
+        />
+        <CustomButton
+          text="Pay"
+          type="paymentScreen"
+          onPress={() => sendPayment()}
+        />
       </View>
     </KeyboardAvoidingView>
   );

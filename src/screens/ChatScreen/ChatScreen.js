@@ -16,6 +16,7 @@ import {useNavigation} from '@react-navigation/native';
 import moment from 'moment';
 import {launchImageLibrary} from 'react-native-image-picker';
 import RNFS from 'react-native-fs';
+import {KeyboardAvoidingView} from 'react-native';
 
 const ChatScreen = ({route}) => {
   const {chat} = route.params ?? {};
@@ -105,11 +106,11 @@ const ChatScreen = ({route}) => {
 
   useEffect(() => {
     const keyboardDidShowListener = Keyboard.addListener(
-      Platform.OS === 'ios' ? 'keyboardWillShow' : 'keyboardDidShow',
+      'keyboardDidShow',
       () => setKeyboardStatus(true),
     );
     const keyboardDidHideListener = Keyboard.addListener(
-      Platform.OS === 'ios' ? 'keyboardWillHide' : 'keyboardDidHide',
+      'keyboardDidHide',
       () => setKeyboardStatus(false),
     );
     return () => {
@@ -179,7 +180,10 @@ const ChatScreen = ({route}) => {
   };
 
   return (
-    <View style={styles.container}>
+    <KeyboardAvoidingView
+      style={styles.container}
+      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+      keyboardVerticalOffset={Platform.OS === 'ios' ? 50 : 0}>
       <View style={styles.header}>
         <TouchableOpacity
           onPress={() => navigation.navigate('Home')}
@@ -191,7 +195,6 @@ const ChatScreen = ({route}) => {
           {chat.name} {chat.surname}
         </Text>
       </View>
-
       <ScrollView
         ref={scrollViewRef}
         style={styles.messagesContainer}
@@ -245,6 +248,8 @@ const ChatScreen = ({route}) => {
           placeholder="Type your message here"
           value={message}
           onChangeText={setMessage}
+          multiline
+          onFocus={() => scrollViewRef.current.scrollToEnd({animated: true})}
         />
         <TouchableOpacity style={styles.imageButton} onPress={handleImageSend}>
           <Ionicons name="image" size={24} color="#007aff" />
@@ -253,7 +258,7 @@ const ChatScreen = ({route}) => {
           <Text style={styles.sendButtonText}>Send</Text>
         </TouchableOpacity>
       </View>
-    </View>
+    </KeyboardAvoidingView>
   );
 };
 
