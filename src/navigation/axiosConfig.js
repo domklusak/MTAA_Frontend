@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const instance = axios.create({
-  baseURL: 'http://dominik.local:8000/',
+  baseURL: 'http://dominik-2.local:8000/',
 });
 
 export function setAuthToken(token) {

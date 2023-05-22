@@ -33,7 +33,7 @@ const ChatScreen = ({route}) => {
   /*WEB_Socket*/
 
   useEffect(() => {
-    ws.current = new WebSocket(`ws://dominik.local:8000/ws/room/${this_room}`);
+    ws.current = new WebSocket(`ws://dominik-2.local:8000/ws/room/${this_room}`);
 
     ws.current.onopen = () => {
       console.log('WebSocket connected');

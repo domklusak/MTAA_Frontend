@@ -15,7 +15,7 @@ const RegisterScreen = () => {
 
   const onRegisterPressed = () => {
     axios
-      .post('http://dominik.local:8000/accounts', {
+      .post('http://dominik-2.local:8000/accounts', {
         password: password,
         tag: 'random',
         balance: 1111,
